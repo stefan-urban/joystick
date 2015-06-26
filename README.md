@@ -8,8 +8,8 @@ A minimal C++ object-oriented API onto joystick devices under Linux.
 
 Create an instance of `Joystick`:
 
-    Joystick joystick();
-
+    Joystick joystick;
+    
 Ensure that it was found and that we can use it:
 
     if (!joystick.isFound())
@@ -30,10 +30,19 @@ Sample events from the `Joystick`:
 
 You might run this in a loop:
 
+    Joystick joystick;
+
     while (true)
     {
       // Restrict rate
       usleep(1000);
+
+      // Always check if joystick is still connected
+      if (!joystick.isFound())
+      {
+        joystick.reconnect();
+        continue;
+      }
 
       // Attempt to sample an event from the joystick
       JoystickEvent event;
@@ -75,3 +84,5 @@ Or provide a specific device name:
 Released under [LGPL v3](http://www.gnu.org/copyleft/lesser.html).
 
 Copyright [Drew Noakes](http://drewnoakes.com) 2013-2014.
+
+Modified by Stefan Urban 2015

@@ -110,9 +110,9 @@ public:
   Joystick(std::string devicePath);
 
   /**
-   * Try to (re)connect to joystick
+   * Try to reconnect to the joystick
    */
-  void connect();
+  void reconnect();
 
   /**
    * Returns true if the joystick was found and may be used, otherwise false.

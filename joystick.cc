@@ -15,6 +15,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <iostream>
 #include <string>
@@ -26,18 +27,22 @@
 Joystick::Joystick()
 {
   devicePath_ = std::string("/dev/input/js0");
+  connect();
 }
 
 Joystick::Joystick(int joystickNumber)
 {
   std::stringstream sstm;
   sstm << "/dev/input/js" << joystickNumber;
+
   devicePath_ = sstm.str();
+  connect();
 }
 
 Joystick::Joystick(std::string devicePath)
   : devicePath_(devicePath)
 {
+    connect();
 }
 
 void Joystick::connect()
