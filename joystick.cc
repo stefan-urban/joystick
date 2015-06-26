@@ -25,29 +25,37 @@
 
 Joystick::Joystick()
 {
-  openPath("/dev/input/js0");
+  devicePath_ = std::string("/dev/input/js0");
 }
 
 Joystick::Joystick(int joystickNumber)
 {
   std::stringstream sstm;
   sstm << "/dev/input/js" << joystickNumber;
-  openPath(sstm.str());
+  devicePath_ = sstm.str();
 }
 
 Joystick::Joystick(std::string devicePath)
+  : devicePath_(devicePath)
 {
-  openPath(devicePath);
 }
 
-void Joystick::openPath(std::string devicePath)
+void Joystick::connect()
 {
-  _fd = open(devicePath.c_str(), O_RDONLY | O_NONBLOCK);
+  // Close if file is still open
+  if (_fd >= 0)
+  {
+    close(_fd);
+    _fd = -1;
+  }
+
+  // Connect to joystick file
+  _fd = open(devicePath_.c_str(), O_RDONLY | O_NONBLOCK);
 }
 
 bool Joystick::sample(JoystickEvent* event)
 {
-  int bytes = read(_fd, event, sizeof(*event)); 
+  int bytes = read(_fd, event, sizeof(*event));
 
   if (bytes == -1)
     return false;
@@ -59,27 +67,27 @@ bool Joystick::sample(JoystickEvent* event)
 
 bool Joystick::isFound()
 {
-  return _fd >= 0;
+  return _fd >= 0 && fcntl(_fd, F_GETFD) != -1 && errno != ENODEV;
 }
 
 char Joystick::numberOfButtons()
 {
-    char number_of_buttons;
-    ioctl(_fd, JSIOCGBUTTONS, &number_of_buttons);
+  char number_of_buttons;
+  ioctl(_fd, JSIOCGBUTTONS, &number_of_buttons);
 
-    return number_of_buttons;
+  return number_of_buttons;
 }
 
 char Joystick::numberOfAxis()
 {
-    char number_of_axis;
-    ioctl(_fd, JSIOCGAXES, &number_of_axis);
+  char number_of_axis;
+  ioctl(_fd, JSIOCGAXES, &number_of_axis);
 
-    return number_of_axis;
+  return number_of_axis;
 }
 
 
 Joystick::~Joystick()
 {
   close(_fd);
-};
+}
