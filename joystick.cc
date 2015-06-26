@@ -27,7 +27,7 @@
 Joystick::Joystick()
 {
   devicePath_ = std::string("/dev/input/js0");
-  connect();
+  reconnect();
 }
 
 Joystick::Joystick(int joystickNumber)
@@ -36,16 +36,16 @@ Joystick::Joystick(int joystickNumber)
   sstm << "/dev/input/js" << joystickNumber;
 
   devicePath_ = sstm.str();
-  connect();
+  reconnect();
 }
 
 Joystick::Joystick(std::string devicePath)
   : devicePath_(devicePath)
 {
-    connect();
+    reconnect();
 }
 
-void Joystick::connect()
+void Joystick::reconnect()
 {
   // Close if file is still open
   if (_fd >= 0)
