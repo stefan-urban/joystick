@@ -108,12 +108,22 @@ public:
    * Initialises an instance for the joystick device specified.
    */
   Joystick(std::string devicePath);
- 
+
   /**
    * Returns true if the joystick was found and may be used, otherwise false.
    */
   bool isFound();
-  
+
+  /**
+   * Returns the number of available buttons
+   */
+  char numberOfButtons();
+
+  /**
+   * Returns the number of available axis
+   */
+  char numberOfAxis();
+
   /**
    * Attempts to populate the provided JoystickEvent instance with data
    * from the joystick. Returns true if data is available, otherwise false.

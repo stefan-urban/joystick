@@ -20,6 +20,8 @@
 #include <string>
 #include <sstream>
 #include "unistd.h"
+#include <linux/joystick.h>
+#include <linux/ioctl.h>
 
 Joystick::Joystick()
 {
@@ -59,6 +61,23 @@ bool Joystick::isFound()
 {
   return _fd >= 0;
 }
+
+char Joystick::numberOfButtons()
+{
+    char number_of_buttons;
+    ioctl(_fd, JSIOCGBUTTONS, &number_of_buttons);
+
+    return number_of_buttons;
+}
+
+char Joystick::numberOfAxis()
+{
+    char number_of_axis;
+    ioctl(_fd, JSIOCGAXES, &number_of_axis);
+
+    return number_of_axis;
+}
+
 
 Joystick::~Joystick()
 {
