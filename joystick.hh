@@ -88,7 +88,7 @@ class Joystick
 private:
   std::string devicePath_;
   
-  int _fd;
+  int _fd = -1;
   
 public:
   ~Joystick();
