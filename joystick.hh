@@ -15,6 +15,7 @@
 #define __JOYSTICK_HH__
 
 #include <string>
+#include <vector>
 
 #define JS_EVENT_BUTTON 0x01 // button pressed/released
 #define JS_EVENT_AXIS   0x02 // joystick moved
@@ -134,6 +135,11 @@ public:
    * from the joystick. Returns true if data is available, otherwise false.
    */
   bool sample(JoystickEvent* event);
+
+  /**
+   * Read all pending events at once. Returns number of events.
+   */
+  size_t samples(std::vector<JoystickEvent> *events);
 };
 
 #endif

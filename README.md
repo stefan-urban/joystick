@@ -45,8 +45,10 @@ You might run this in a loop:
       }
 
       // Attempt to sample an event from the joystick
-      JoystickEvent event;
-      if (joystick.sample(&event))
+      std::vector<JoystickEvent> events;
+      joystick.samples(&events);
+
+      for (JoystickEvent event : events)
       {
         if (event.isButton())
         {

@@ -70,6 +70,19 @@ bool Joystick::sample(JoystickEvent* event)
   return bytes == sizeof(*event);
 }
 
+size_t Joystick::samples(std::vector<JoystickEvent> *events)
+{
+    JoystickEvent event;
+
+    while (sample(&event))
+    {
+        events->push_back(event);
+        event = JoystickEvent();
+    }
+
+    return events->size();
+}
+
 bool Joystick::isFound()
 {
   return _fd >= 0 && fcntl(_fd, F_GETFD) != -1 && errno != ENODEV;
